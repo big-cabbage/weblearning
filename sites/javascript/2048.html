@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Basic</title>
+	<meta charset="utf-8">
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	<link rel="stylesheet" href="">
+	<style type="text/css">
+	*{
+		text-align: center;
+		margin: 0px;
+		padding: 0px;
+	}
+	#content{
+		background-color: #bbada2;
+		display: inline-block;
+		padding: 10px 0 0  10px;
+		position: absolute;
+		top: 50%;
+		margin-top: -200px;
+		margin-left: -200px;
+	}
+
+	#top-score
+	{
+		position: fixed;
+		top: 50%;
+		left: : 50%;
+		margin-top: -280px; 
+		margin-left: -10px;
+		display: block;
+		padding: 10px 0;
+		width: 150px;
+		background-color: #01a9d0;
+		font-size: 35px;
+	}
+	</style>
+	<script type="text/javascript">
+		function reset(){
+			var i,j;
+			for(i=0;i<4;i++)
+			{
+				for(j=0;j<4;j++)
+				{
+					arr[i][j]=0;
+				}
+			}
+			score=0;
+			flag=0;
+			arr=createNumber(arr,2);
+			document.getElementById("top-score").innerHTML=0;
+		}
+
+		function map(val)
+		{
+			var c=document.getElementById('myCanvas');
+			var cxt=c.getContext('2d');
+			var m;
+			for (i = 0; i < 4; i++) {
+				for(j = 0;j < 4; j++)
+				{
+					m=val[i][j];
+					if(score<m)
+					{
+						score=m;
+						document.getElementById("top-score").innerHTML=score;
+					}
+					if(m<8)
+					{
+						cxt.fillStyle="#efe5db";
+						cxt.fillRect(j*100,i*100,90,90);
+						if(m!=0)
+						{
+							cxt.fillStyle="#786e64";
+							cxt.font="50px Verdana";
+							cxt.fillText(m,j*100+30,i*100+60);
+						}
+					}
+					else if(m<32)
+					{
+						if(m<10)
+						{
+							cxt.fillStyle="#f3b27c";
+							cxt.fillRect(j*100,i*100,90,90);
+							cxt.fillStyle="#f9fbfa";
+							cxt.font="50px Verdana";
+							cxt.fillText(m,j*100+30,i*100+60);
+						}
+						else
+						{
+							cxt.fillStyle="#f3b27c";
+							cxt.fillRect(j*100,i*100,90,90);
+							cxt.fillStyle="#f9fbfa";
+							cxt.font="45px Verdana";
+							cxt.fillText(m,j*100+15,i*100+60);
+						}
+					}
+					else
+					{
+						if(m<128)
+						{
+							cxt.fillStyle="#ea5837";
+							cxt.fillRect(j*100,i*100,90,90);
+							cxt.fillStyle="#f9fbfa";
+							cxt.font="45px Verdana";
+							cxt.fillText(m,j*100+15,i*100+60);
+						}
+						else if(m<512)
+						{
+							cxt.fillStyle="#f1d96a";
+							cxt.fillRect(j*100,i*100,90,90);
+							cxt.fillStyle="#f9fbfa";
+							cxt.font="35px Verdana";
+							cxt.fillText(m,j*100+12,i*100+60);
+						}
+						else
+						{
+							if(m<2048)
+							{
+								if(m<1000)
+								{
+									cxt.fillStyle="#e3bf29";
+									cxt.fillRect(j*100,i*100,90,90);
+									cxt.fillStyle="#f9fbfa";
+									cxt.font="35px Verdana";
+									cxt.fillText(m,j*100+12,i*100+60);
+								}
+								else
+								{
+									cxt.fillStyle="#e3bf29";
+									cxt.fillRect(j*100,i*100,90,90);
+									cxt.fillStyle="#f9fbfa";
+									cxt.font="30px Verdana";
+									cxt.fillText(m,j*100+8,i*100+60);
+								}
+							}
+							else if(m<8192)
+							{
+								cxt.fillStyle="#5eda92";
+								cxt.fillRect(j*100,i*100,90,90);
+								cxt.fillStyle="#f9fbfa";
+								cxt.font="30px Verdana";
+								cxt.fillText(m,j*100+8,i*100+60);
+							}
+							else
+							{
+								cxt.fillStyle="#58407c";
+								cxt.fillRect(j*100,i*100,90,90);
+								cxt.fillStyle="#f9fbfa";
+								cxt.font="30px Verdana";
+								cxt.fillText(m,j*100+8,i*100+60);
+							}
+						}
+					
+					}
+				}
+			}
+		}
+
+		function move()
+		{
+			var x;
+			if(window.event)
+			{
+				x=event.keyCode;
+			}
+			else if(event.which)
+			{
+				x=event.which;
+			}
+			console.log(x);
+			flag=0;
+			if(x==38)
+			{
+				arr=goUp(arr);
+				if(flag==1)
+				{
+					arr=createNumber(arr,1);
+					map(arr);
+				}
+			}
+			else if(x==39)
+			{
+				arr=goRight(arr);
+				if(flag==1)
+				{
+					arr=createNumber(arr,1);
+					map(arr);
+				}
+			}
+			else
+			{
+				if(x==40)
+				{
+					arr=goDown(arr);
+					if(flag==1)
+					{
+						arr=createNumber(arr,1);
+						map(arr);
+					}
+				}
+				else if (x==37)
+				{
+					arr=goLeft(arr);
+					if(flag==1)
+					{
+						arr=createNumber(arr,1);
+						map(arr);
+					}
+				}
+			}
+		}
+
+		function goUp(val)
+		{
+			var i,j;
+			var arr=new Array(4);
+			for (i = 0; i < 4; i++) 
+			{
+				for(j=0;j<4;j++)
+				{
+					arr[j]=val[j][i];
+				}
+				arr=process(arr);
+				for(j=0;j<4;j++)
+				{
+					val[j][i]=arr[j];
+				}
+			}
+			return val;
+		}
+
+		function goRight(val)
+		{
+			var i,j,n;
+			var arr=new Array(4);
+			for (i = 0; i < 4; i++) 
+			{
+				n=0;
+				for(j=3;j>=0;j--)
+				{
+					arr[n]=val[i][j];
+					n++;
+				}
+				arr=process(arr);
+				n=0;
+				for(j=3;j>=0;j--)
+				{
+					val[i][j]=arr[n];
+					n++;
+				}
+			}
+			return val;
+		}
+
+		function goDown(val)
+		{
+			var i,j,n;
+			var arr=new Array(4);
+			for (i = 0; i < 4; i++) 
+			{
+				n=0;
+				for(j=3;j>=0;j--)
+				{
+					arr[n]=val[j][i];
+					n++;
+				}
+				arr=process(arr);
+				n=0;
+				for(j=3;j>=0;j--)
+				{
+					val[j][i]=arr[n];
+					n++;
+				}
+			}
+			return val;
+		}
+
+		function goLeft(val)
+		{
+			var i;
+			for (i = 0; i < 4; i++) 
+			{
+				val[i]=process(val[i]);
+			}
+			return val;
+		}
+
+		//process the arr
+		function process(val)
+		{
+			var i,j,n,k;//n stands for the number of non-zero
+			j=0;
+			//move 0 to the behind
+			for(i=0;i<4;i++)
+			{
+				if(val[j]==0)
+				{
+					if(val[i]!=0&&i!=j)
+					{
+						flag=1;
+						val[j]=val[i];
+						val[i]=0;
+						j++;
+					}
+				}
+				else
+				{
+					j++;
+				}
+			}
+			n=j;
+			i=0;
+			//add the same element
+			for(j=1;j<n;j++,i++)
+			{
+				if(val[i]==val[j])
+				{
+					flag=1;
+					val[i]=val[i]+val[j];
+					for(k=j;k<n-1;k++)
+					{
+						val[k]=val[k+1];
+					}
+					val[n-1]=0;
+					n--;
+				}
+			}
+			return val;
+		}
+
+		function createNumber(val,num)
+		{
+			var i,j,n,r;
+			n=0;
+			while(n<num)
+			{
+				i=getRandom(4);
+				j=getRandom(4);
+				if(val[i][j]==0)
+				{
+					r=Math.random();
+					if(score<32)
+					{
+						if(r<0.9)
+						{
+							val[i][j]=2;
+						}
+						else
+						{
+							val[i][j]=4;
+						}
+					}
+					else if(score<512)
+					{
+						if(r<0.5)
+						{
+							val[i][j]=2;
+						}
+						else if(r<0.8)
+						{
+							val[i][j]=4;
+						}
+						else
+						{
+							val[i][j]=8;
+						}
+					}
+					else
+					{
+						if(r<0.3)
+						{
+							val[i][j]=2;
+						}
+						else if(r<0.7)
+						{
+							val[i][j]=4;
+						}
+						else
+						{
+							if(r<0.9)
+							{
+								val[i][j]=8;
+							}
+							else
+							{
+								val[i][j]=16;
+							}
+						}
+					}
+					n++;
+				}
+			}
+			return val;
+		}
+
+		function getRandom(maxSize)
+		{
+			var k=Math.random();
+			k=k*maxSize;
+			if(k==maxSize)
+			{
+				k=k*0.99;
+			}
+			k=parseInt(k);
+			return k;
+		}
+	</script>
+</head>
+<body onkeydown="move();">
+	<div id="content">
+		<span id="top-score">100</span>
+		<canvas id="myCanvas" width="400" height="400"></canvas>
+	</div>
+	<script type="text/javascript">
+		var arr=[[0,0,0,0]
+				,[0,0,0,0]
+				,[0,0,0,0]
+				,[0,0,0,0]];
+		var flag=0;
+		var score=0;
+		reset(arr);
+		map(arr);
+		for (var i = 0; i < 4; i++)
+		{
+			console.log(arr[i]);
+		}
+	</script>
+</body>
+</html>
